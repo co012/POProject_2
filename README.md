@@ -10,3 +10,5 @@ Right Arrow - Turn tank turret clockwise
 Shift - Fire  
 
 Number Keys - Use PowerUp  
+
+Esc - End game
