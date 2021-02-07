@@ -29,7 +29,7 @@ public abstract class Tank {
             think();
         }
 
-        if(tankIntent.equals(TankIntent.MOVE)){
+        if(tankIntent.equals(TankIntent.MOVE) && isAlive()){
             Vector2d potentialNewPosition = position.add(MoveDirection.toUnitVector(moveDirection));
             MapElement mapElement = map.getMapElementOnField(potentialNewPosition);
             if(!(mapElement.equals(MapElement.BOX) || mapElement.equals(MapElement.MAP_BOUNDARY))){
