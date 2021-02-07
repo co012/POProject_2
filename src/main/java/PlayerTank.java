@@ -47,6 +47,7 @@ public final class PlayerTank extends Tank{
     }
 
     public void rotateTurret(boolean clockwise){
+        clockwise = !clockwise;
         if(clockwise) this.shootDirection = ShootDirection.getClockwiseNext(this.shootDirection);
         else this.shootDirection = ShootDirection.getClockwisePrevious(this.shootDirection);
     }
