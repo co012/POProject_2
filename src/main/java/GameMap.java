@@ -199,9 +199,7 @@ public class GameMap {
                 damage = 1000;
             }
 
-            if (fieldsWithExplosions.containsKey(newPosition))
-                fieldsWithExplosions.get(newPosition).changeExplosionDamage(damage * 2);
-            else fieldsWithExplosions.put(newPosition, new Kaboom(damage * 2, newPosition));
+            addOrEnhanceExplosion(newPosition,damage);
 
             if (tank.isAlive()) {
                 tanks.put(newPosition, tank);
@@ -218,7 +216,7 @@ public class GameMap {
             if (tank.isAlive()) {
                 tanks.put(newPosition, tank);
             } else {
-                kaboom.changeExplosionDamage(kaboom.getExplosionDamage() + tank.getLives());
+                addOrEnhanceExplosion(newPosition,kaboom.getExplosionDamage() + tank.getLives());
             }
         } else if (mapElement.equals(MapElement.BULLET)) {
             Bullet bullet = bullets.stream()
@@ -230,12 +228,12 @@ public class GameMap {
             if (tank.isAlive()) {
                 tanks.put(newPosition, tank);
             } else {
-                explosionDamage *= 2;
+                explosionDamage += explosionDamage + tank.getLives();
                 gameInfoChangeListener.onTankDestroyed();
             }
             bullet.handleCollision();
             if (!bullet.isStillGoing()) bullets.remove(bullet);
-            fieldsWithExplosions.put(bullet.getPosition(), new Kaboom(explosionDamage, bullet.getPosition()));
+            addOrEnhanceExplosion(newPosition,explosionDamage);
         } else if (mapElement.equals(MapElement.POWER_UP)) {
             PowerUp powerUp = powerUps.remove(newPosition);
             tank.powerUpManager.powerUpCollected(powerUp);
@@ -253,19 +251,25 @@ public class GameMap {
             Box box = boxes.get(newPosition);
             box.takeDamage(bullet.getAttackDamage());
             if (box.isDestroyed()) boxes.remove(box.position);
-            fieldsWithExplosions.put(box.position, new Kaboom(bullet.getAttackDamage(), box.position));
+            addOrEnhanceExplosion(newPosition,bullet.getAttackDamage());
 
         } else if (mapElement.equals(MapElement.TANK)) {
             Tank tank = tanks.get(newPosition);
             int explosionDamage = bullet.getAttackDamage();
             tank.takeDamage(bullet.getAttackDamage());
             if (!tank.isAlive()) {
-                explosionDamage *= 2;
+                explosionDamage += explosionDamage + tank.getLives();
                 tanks.remove(tank.position);
                 gameInfoChangeListener.onTankDestroyed();
             }
-            fieldsWithExplosions.put(bullet.getPosition(), new Kaboom(explosionDamage, bullet.getPosition()));
+            addOrEnhanceExplosion(newPosition,explosionDamage);
         }
 
+    }
+
+    private void addOrEnhanceExplosion(Vector2d position,int damage){
+        if (fieldsWithExplosions.containsKey(position))
+            fieldsWithExplosions.get(position).changeExplosionDamage(damage);
+        else fieldsWithExplosions.put(position, new Kaboom(damage, position));
     }
 }
