@@ -35,18 +35,17 @@ public class Launcher extends Application {
         stage.initOwner(primaryStage);
         stage.initModality(Modality.WINDOW_MODAL);
         stage.setScene(new Scene(root));
-        stage.setOnCloseRequest((e) -> primaryStage.close());
         endGameController.setOnExitGameRunnable(primaryStage::close);
         endGameController.setOnTryAgainRunnable(() -> {
             try {
-                startNewGame();
                 stage.close();
+                startNewGame();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         endGameController.setScore(score);
-        stage.showAndWait();
+        stage.show();
 
     }
 

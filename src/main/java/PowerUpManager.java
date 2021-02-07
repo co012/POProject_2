@@ -1,8 +1,6 @@
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PowerUpManager {
@@ -70,6 +68,13 @@ public class PowerUpManager {
 
     public Collection<PowerUp> getActivePowerUps(){
         return Set.copyOf(activePowerUpsDurability.keySet());
+    }
+
+    public void activateRandomPowerUp(){
+        Set<PowerUp> availablePowerUps = Set.copyOf(powerUps.keySet());
+        if(availablePowerUps.isEmpty())return;
+        PowerUp powerUp = (PowerUp) availablePowerUps.toArray()[0];
+        usePowerUp(powerUp);
     }
 
 

@@ -1,4 +1,3 @@
-import java.util.*;
 
 public class EnemyTank extends Tank {
 
@@ -12,6 +11,8 @@ public class EnemyTank extends Tank {
     @Override
     protected void think() {
         tankIntent = TankIntent.getRandomActiveIntent();
+        if(map.random.nextInt(100) >= 50) powerUpManager.activateRandomPowerUp();
+
 
         Vector2d distanceToPlayer = map.getPlayerTank().position.subtract(position);
         if(Vector2d.ZERO.equals(distanceToPlayer))return;

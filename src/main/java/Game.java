@@ -10,8 +10,6 @@ import java.io.IOException;
 
 public class Game {
 
-    private final GameProperties gameProperties;
-    private Stage stage;
     private final GameMap gameMap;
     private final SidebarController sidebarController;
     private final PlayerTank playerTank;
@@ -19,9 +17,7 @@ public class Game {
 
 
     public Game(Stage stage, GameProperties gameProperties) throws IOException{
-        this.gameProperties = gameProperties;
         this.gameEndEventHandler = GameEndEventHandler.voidOnGameOverEventHandler;
-        this.stage = stage;
         GameMapVisualiser mapVisualiser = new GameMapVisualiser(gameProperties.mapWidth, gameProperties.mapHeight);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("sidebar.fxml"));
         final VBox sidebar;
@@ -62,7 +58,6 @@ public class Game {
         }
 
         if (!playerTank.isAlive()){
-            handlePlayerDead();
             return;
         }
         if (keyCode.equals(KeyCode.SHIFT) || keyCode.equals(KeyCode.W)){
@@ -97,6 +92,7 @@ public class Game {
         }
 
         gameMap.draw();
+        if(!playerTank.isAlive())handlePlayerDead();
 
     }
 
@@ -104,7 +100,6 @@ public class Game {
 
     private void handlePlayerDead(){
         gameEndEventHandler.onGameOver(sidebarController.getScore());
-
 
     }
 
